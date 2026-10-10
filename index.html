@@ -16,6 +16,16 @@
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.error{padding:20px;color:#f5d787}
 @keyframes cardFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}@keyframes witchFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}@keyframes laughAppear{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 @media(prefers-reduced-motion:reduce){.card,.witch,.laugh{animation:none}.curtain,.hand,.gift .action,.spell-fade{transition-duration:.01s}}
+
+.candy-rain{position:absolute;inset:0;z-index:2;overflow:hidden;pointer-events:none}
+.falling-treat{position:absolute;top:-12%;left:var(--x);width:var(--size);aspect-ratio:1;opacity:0;filter:drop-shadow(0 2px 4px #0008);animation:treatFall var(--duration) var(--delay) linear both;will-change:transform,opacity}
+.falling-treat svg{width:100%;height:100%;display:block}
+.falling-treat.ghost{animation-name:ghostFall}
+.gift .eyebrow,.gift .heading,.gift .small,.gift-treat{position:relative;z-index:3}
+.gift .action{z-index:3}
+@keyframes treatFall{0%{opacity:0;transform:translate3d(0,0,0) rotate(var(--turn))}8%{opacity:.9}80%{opacity:.9}100%{opacity:0;transform:translate3d(var(--drift),195cqi,0) rotate(calc(var(--turn) + 240deg))}}
+@keyframes ghostFall{0%{opacity:0;transform:translate3d(0,0,0) rotate(var(--turn))}12%{opacity:.85}38%{opacity:.85}52%{opacity:.12}64%{opacity:.7}85%{opacity:.6}100%{opacity:0;transform:translate3d(var(--drift),195cqi,0) rotate(calc(var(--turn) + 160deg))}}
+@media(prefers-reduced-motion:reduce){.candy-rain{display:none}}
 </style>
 </head>
 <body>
@@ -42,6 +52,7 @@
  </section>
  <section class="view spell" id="spell" aria-label="魔女の笑い声" hidden inert><p class="laugh">イヒヒヒヒ</p></section>
  <section class="view gift" id="gift" aria-labelledby="gift-title" hidden inert>
+  <div class="candy-rain" id="candy-rain" aria-hidden="true"></div>
   <p class="eyebrow">A LITTLE TREAT FOR YOU</p>
   <h2 class="heading" id="gift-title">お菓子、どうぞ♬</h2>
   <p class="small" id="gift-copy"><strong class="gift-sender" id="gift-sender"></strong>、あなたへ。</p>
@@ -65,6 +76,7 @@
  const copy=document.getElementById('gift-sender');
  const hand=document.getElementById('gift-hand');
  const treatName=document.getElementById('gift-treat');
+ const rain=document.getElementById('candy-rain');
  const cards=Array.from(document.querySelectorAll('.card'));
  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
  const names={witch:'かぼちゃの魔女',ghost:'おばけちゃん',vampire:'吸血鬼ちゃん',zombie:'ゾンビちゃん'};
@@ -74,6 +86,34 @@
   vampire:{src:'https://raw.githubusercontent.com/mimiusagino7-commits/halloween-assets/main/treat-vampire.png',label:'鉄分キャンディ'},
   zombie:{src:'https://raw.githubusercontent.com/mimiusagino7-commits/halloween-assets/main/treat-zombie.png',label:'目玉グミ'}
  };
+
+ const candyArt={
+  witch:`<path fill="#b56d29" stroke="#f4c677" stroke-width="2" d="M20 11Q10 7 7 19Q1 36 10 45Q17 51 25 47Q34 50 41 44Q50 35 43 20Q39 8 29 11Z"/><path d="M24 11Q22 5 29 3" fill="none" stroke="#80874a" stroke-width="5"/><path d="M21 14Q13 29 20 45M29 14Q37 28 30 45" fill="none" stroke="#804a24" stroke-width="2"/><path fill="#3e242b" d="M13 25l6-6 3 7zm17 1 3-7 6 6zM23 31l3-5 3 5zM13 34q12 13 26-1l-4 8-5-1-5 5-5-4-4 1z"/>`,
+  ghost:`<path d="M12 12Q25 4 39 12L41 37Q25 48 10 37Z" fill="#fff2dd" stroke="#d8c5d8" stroke-width="2"/><ellipse cx="25" cy="12" rx="13" ry="6" fill="#fffaf0"/><path d="M14 35Q26 40 38 34" fill="none" stroke="#e1ced8" stroke-width="2"/><ellipse cx="20" cy="23" rx="2" ry="3" fill="#68516e"/><ellipse cx="31" cy="23" rx="2" ry="3" fill="#68516e"/><path d="M23 30q3 3 6-1" fill="none" stroke="#68516e" stroke-width="1.5"/>`,
+  vampire:`<path d="M14 16 3 11l2 15-2 14 12-7M36 16l11-5-2 15 2 14-12-7" fill="#ac4772" stroke="#e3b273" stroke-width="1.5"/><path d="M5 16l7 6M5 34l7-5M45 16l-7 6M45 34l-7-5" fill="none" stroke="#e4b680" stroke-width="1.5"/><ellipse cx="25" cy="25" rx="15" ry="15" fill="#672543" stroke="#e5b97e" stroke-width="2"/><ellipse cx="21" cy="19" rx="7" ry="4" fill="#e0859d" opacity=".65"/><path d="M23 22l2-5 2 5 5 1-4 3 1 5-4-3-4 3 1-5-4-3z" fill="#e4ba78"/>`,
+  zombie:`<circle cx="25" cy="25" r="21" fill="#f5ead7" stroke="#cfb8c8" stroke-width="2"/><circle cx="25" cy="25" r="13" fill="IRIS"/><path d="M25 13v7m0 10v7M13 25h7m10 0h7m-20-8 5 5m6 6 5 5m0-16-5 5m-6 6-5 5" stroke="#fff8d5" stroke-width="1" opacity=".65"/><circle cx="25" cy="25" r="6.5" fill="#0b1420"/><circle cx="28" cy="21" r="3" fill="#fff"/><circle cx="15" cy="36" r="1.6" fill="#fff"/>`
+ };
+ let rainTimer;
+ function clearRain(){clearTimeout(rainTimer);rain.replaceChildren();}
+ function rainTreats(child){
+  clearRain();
+  if(reduced)return;
+  for(let i=0;i<16;i++){
+   const particle=document.createElement('span');
+   particle.className='falling-treat '+child;
+   particle.dataset.treat=child;
+   particle.style.setProperty('--x',(4+((i*37)%87))+'%');
+   particle.style.setProperty('--size',(6+(i%4)*1.2)+'%');
+   particle.style.setProperty('--duration',(4.8+(i%5)*.42)+'s');
+   particle.style.setProperty('--delay',(i*.13)+'s');
+   particle.style.setProperty('--turn',(i*47-90)+'deg');
+   particle.style.setProperty('--drift',((i%2?1:-1)*(3+i%4))+'cqi');
+   const art=candyArt[child].replace('IRIS',i%2?'#39baa7':'#a744c0');
+   particle.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" focusable="false" aria-hidden="true">'+art+'</svg>';
+   rain.appendChild(particle);
+  }
+  rainTimer=setTimeout(clearRain,9500);
+ }
  let busy=false;
  const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
  function show(id,phase){
@@ -81,6 +121,7 @@
   stage.dataset.phase=phase||id;
  }
  function chooseScreen(){
+  clearRain();
   busy=false;
   cards.forEach(card=>{card.disabled=false;});
   spell.classList.remove('spell-fade');
@@ -110,6 +151,7 @@
   show('gift','gift-enter');
   await pause(40);
   stage.dataset.phase='gift';
+  rainTreats(card.dataset.child);
   status.textContent=name+'から、'+treat.label+'をどうぞ。';
   await pause(reduced?120:2800);
   stage.dataset.phase='gift-ready';
