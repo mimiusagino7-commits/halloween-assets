@@ -33,7 +33,7 @@
  <section class="view welcome" id="welcome" aria-labelledby="welcome-title">
   <p class="eyebrow">HALLOWEEN EXHIBITION</p>
   <h1 class="heading" id="welcome-title">ようこそ、ようこそ。</h1>
-  <div class="witch"><div class="witch-glow"></div><div class="witch-clip"><img src="https://raw.githubusercontent.com/mimiusagino7-commits/halloween-assets/main/witch-welcome.png" alt="赤い巻き髪と紫の帽子の魔女" decoding="async"></div></div>
+  <div class="witch"><div class="witch-glow"></div><div class="witch-clip"><img src="./witch-welcome.png" alt="赤い巻き髪と紫の帽子の魔女" decoding="async"></div></div>
   <p class="welcome-copy">お菓子をひとつ、いかが？</p>
   <button class="action" id="start" type="button" disabled>準備中…</button>
   <div class="ornament" aria-hidden="true">✦ ☽ ✦</div>
@@ -43,10 +43,10 @@
   <h2 class="heading" id="choices-title">お好きな子を、ひとり。</h2>
   <p class="small">気になる絵をタップしてね。</p>
   <div class="gallery">
-   <button class="card" type="button" data-child="witch" style="--delay:-.8s" aria-label="かぼちゃの魔女を選ぶ"><img src="https://raw.githubusercontent.com/mimiusagino7-commits/halloween-assets/main/pumpkin-witch.jpg" alt="" decoding="async"><span>かぼちゃの魔女</span></button>
-   <button class="card" type="button" data-child="ghost" style="--delay:-3s" aria-label="おばけちゃんを選ぶ"><img src="https://raw.githubusercontent.com/mimiusagino7-commits/halloween-assets/main/ghost.jpg" alt="" decoding="async"><span>おばけちゃん</span></button>
-   <button class="card" type="button" data-child="vampire" style="--delay:-1.8s" aria-label="吸血鬼ちゃんを選ぶ"><img src="https://raw.githubusercontent.com/mimiusagino7-commits/halloween-assets/main/vampire.jpg" alt="" decoding="async"><span>吸血鬼ちゃん</span></button>
-   <button class="card" type="button" data-child="zombie" style="--delay:-4s" aria-label="ゾンビちゃんを選ぶ"><img src="https://raw.githubusercontent.com/mimiusagino7-commits/halloween-assets/main/zombie.jpg" alt="" decoding="async"><span>ゾンビちゃん</span></button>
+   <button class="card" type="button" data-child="witch" style="--delay:-.8s" aria-label="かぼちゃの魔女を選ぶ"><img src="./pumpkin-witch.jpg" alt="" decoding="async"><span>かぼちゃの魔女</span></button>
+   <button class="card" type="button" data-child="ghost" style="--delay:-3s" aria-label="おばけちゃんを選ぶ"><img src="./ghost.jpg" alt="" decoding="async"><span>おばけちゃん</span></button>
+   <button class="card" type="button" data-child="vampire" style="--delay:-1.8s" aria-label="吸血鬼ちゃんを選ぶ"><img src="./vampire.jpg" alt="" decoding="async"><span>吸血鬼ちゃん</span></button>
+   <button class="card" type="button" data-child="zombie" style="--delay:-4s" aria-label="ゾンビちゃんを選ぶ"><img src="./zombie.jpg" alt="" decoding="async"><span>ゾンビちゃん</span></button>
   </div>
   <p class="hint">どの子も、あなたを待っているよ。</p>
  </section>
@@ -81,10 +81,10 @@
  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
  const names={witch:'かぼちゃの魔女',ghost:'おばけちゃん',vampire:'吸血鬼ちゃん',zombie:'ゾンビちゃん'};
  const treats={
-  witch:{src:'https://raw.githubusercontent.com/mimiusagino7-commits/halloween-assets/main/treat-witch.png',label:'かぼちゃクッキー'},
-  ghost:{src:'https://raw.githubusercontent.com/mimiusagino7-commits/halloween-assets/main/treat-ghost.png',label:'消えるマシュマロ'},
-  vampire:{src:'https://raw.githubusercontent.com/mimiusagino7-commits/halloween-assets/main/treat-vampire.png',label:'鉄分キャンディ'},
-  zombie:{src:'https://raw.githubusercontent.com/mimiusagino7-commits/halloween-assets/main/treat-zombie.png',label:'目玉グミ'}
+  witch:{src:'./treat-witch.png',label:'かぼちゃクッキー'},
+  ghost:{src:'./treat-ghost.png',label:'消えるマシュマロ'},
+  vampire:{src:'./treat-vampire.png',label:'鉄分キャンディ'},
+  zombie:{src:'./treat-zombie.png',label:'目玉グミ'}
  };
 
  const candyArt={
